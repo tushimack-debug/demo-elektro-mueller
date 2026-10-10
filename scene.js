@@ -7,7 +7,8 @@ import { RoomEnvironment } from "./vendor/jsm/environments/RoomEnvironment.js";
 
 const canvas = document.querySelector("#webgl");
 const root = document.documentElement;
-const reduce = root.classList.contains("reduce");
+const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const reduce = motion.matches;
 
 function fail() {
   document.body.classList.add("no-webgl");
@@ -16,7 +17,7 @@ function fail() {
 if (!canvas || reduce) {
   fail();
 } else {
-  boot();
+  try { boot(); } catch { fail(); }
 }
 
 function boot() {
@@ -26,7 +27,7 @@ function boot() {
       canvas,
       antialias: true,
       alpha: false,
-      powerPreference: "high-performance"
+      powerPreference: "low-power"
     });
   } catch (err) {
     fail();
@@ -57,7 +58,7 @@ function boot() {
   scene.add(bulb);
 
   const profile = [];
-  const steps = 72;
+  const steps = mobile ? 36 : 60;
   for (let i = 0; i <= steps; i++) {
     const u = i / steps;
     const y = -1.18 + u * 2.24;
@@ -74,10 +75,13 @@ function boot() {
     profile.push(new THREE.Vector2(r, y));
   }
   const pmrem = new THREE.PMREMGenerator(renderer);
-  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  const room = new RoomEnvironment();
+  const environment = pmrem.fromScene(room, 0.04);
+  scene.environment = environment.texture;
+  room.dispose();
   pmrem.dispose();
   const glass = new THREE.Mesh(
-    new THREE.LatheGeometry(profile, 128),
+    new THREE.LatheGeometry(profile, mobile ? 48 : 96),
     new THREE.MeshPhysicalMaterial({
       color: 0xeef3f8,
       metalness: 0,
@@ -197,7 +201,7 @@ function boot() {
     mobile ? 0.25 : 0.38,
     0.86
   );
-  composer.addPass(bloom);
+  if (!mobile) composer.addPass(bloom);
   composer.addPass(new OutputPass());
 
   const mouse = { x: 0, y: 0 };
@@ -236,19 +240,53 @@ function boot() {
   const camY = mobile ? 1.15 : 0.18;
   const camZ = mobile ? 6.2 : 5.15;
   const lookX = mobile ? 0.35 : 0.2;
-  let running = true;
+  let animationId = 0;
+  let stopped = false;
+  let lastFrame = 0;
+  let elapsed = 0;
+  let previous = 0;
+  const slot = document.querySelector(".bulb-slot");
+  function active() { return !stopped && !document.hidden && !motion.matches; }
+  function schedule() { if (active() && !animationId) animationId = requestAnimationFrame(frame); }
   document.addEventListener("visibilitychange", () => {
-    running = !document.hidden;
+    cancelAnimationFrame(animationId); animationId = 0; previous = 0; schedule();
   });
-  const clock = new THREE.Clock();
+  motion.addEventListener("change", () => {
+    document.body.classList.toggle("reduce", motion.matches);
+    cancelAnimationFrame(animationId); animationId = 0; previous = 0; schedule();
+  });
+  function dispose() {
+    if (stopped) return;
+    stopped = true;
+    cancelAnimationFrame(animationId);
+    window.removeEventListener("resize", resize);
+    window.removeEventListener("scroll", measure);
+    const geometries = new Set(), materials = new Set();
+    scene.traverse(object => {
+      if (object.geometry) geometries.add(object.geometry);
+      if (object.material) for (const material of [object.material].flat()) materials.add(material);
+    });
+    geometries.forEach(item => item.dispose()); materials.forEach(item => item.dispose());
+    environment.dispose(); bloom.dispose(); composer.passes.forEach(pass => { if (pass !== bloom) pass.dispose?.(); });
+    composer.dispose(); renderer.dispose();
+    fail();
+  }
+  window.addEventListener("stop-animation", dispose, { once: true });
+  canvas.addEventListener("webglcontextlost", event => { event.preventDefault(); dispose(); });
+  window.addEventListener("pagehide", event => { if (!event.persisted) dispose(); });
 
-  function frame() {
-    requestAnimationFrame(frame);
-    if (!running) return;
-    const t = clock.getElapsedTime();
+  function frame(now) {
+    animationId = 0;
+    if (!active()) return;
+    schedule();
+    if (now - lastFrame < 1000 / 30) return;
+    lastFrame = now;
+    if (previous) elapsed += Math.min((now - previous) / 1000, 0.1);
+    previous = now;
+    const t = elapsed;
     const ignite = Math.min(1, t / 1.2);
     const eased = ignite * ignite * (3 - 2 * ignite);
-    const flicker = t > 0.35 && t < 1.15 ? 0.62 + Math.abs(Math.sin(t * 34)) * 0.38 : 1;
+    const flicker = 1;
     const power = eased * flicker;
 
     filament.material.color.setRGB(power * 6.5, power * 2.4, power * 0.35);
@@ -274,7 +312,6 @@ function boot() {
     bulb.rotation.y = t * 0.18 + scrollP * 0.6;
     bulb.rotation.z = Math.sin(t * 0.45) * 0.05;
     if (mobile) {
-      const slot = document.querySelector(".bulb-slot");
       const rect = slot ? slot.getBoundingClientRect() : null;
       if (rect && rect.height > 0) {
         const nx = ((rect.left + rect.width * 0.68) / window.innerWidth) * 2 - 1;
@@ -300,83 +337,7 @@ function boot() {
     camera.lookAt(lookX + mouse.x * 0.08, mobile ? 1.2 : 0.08, 0);
     composer.render();
   }
-  frame();
+  schedule();
+  document.body.classList.remove("no-webgl");
   document.body.classList.add("webgl-on");
 }
-
-const cards = document.querySelectorAll(".card");
-const fine = window.matchMedia("(pointer: fine)").matches && !reduce;
-if (fine) {
-  cards.forEach((card) => {
-    card.addEventListener("pointermove", (event) => {
-      const r = card.getBoundingClientRect();
-      const x = (event.clientX - r.left) / r.width - 0.5;
-      const y = (event.clientY - r.top) / r.height - 0.5;
-      card.style.transform = "rotateX(" + (-y * 7).toFixed(2) + "deg) rotateY(" + (x * 9).toFixed(2) + "deg)";
-    });
-    card.addEventListener("pointerleave", () => {
-      card.style.transform = "";
-    });
-  });
-}
-
-if (!reduce && "IntersectionObserver" in window) {
-  document.documentElement.classList.add("js");
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) entry.target.classList.add("in");
-    });
-  }, { threshold: 0.16 });
-  document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
-}
-
-const toggle = document.querySelector(".nav-toggle");
-const nav = document.querySelector("#nav");
-if (toggle && nav) {
-  toggle.addEventListener("click", () => {
-    const open = nav.classList.toggle("is-open");
-    toggle.setAttribute("aria-expanded", open ? "true" : "false");
-  });
-  nav.addEventListener("click", (event) => {
-    if (event.target.closest("a")) {
-      nav.classList.remove("is-open");
-      toggle.setAttribute("aria-expanded", "false");
-    }
-  });
-}
-
-const mapBtn = document.querySelector("#map-load");
-if (mapBtn) {
-  mapBtn.addEventListener("click", () => {
-    const hold = document.querySelector("#map-hold");
-    const frame = document.createElement("iframe");
-    frame.title = "Karte: Münchener Straße 47, 91054 Erlangen";
-    frame.loading = "lazy";
-    frame.referrerPolicy = "no-referrer-when-downgrade";
-    frame.src = "https://maps.google.com/maps?q=M%C3%BCnchener+Str.+47,+91054+Erlangen&hl=de&z=16&output=embed";
-    hold.replaceChildren(frame);
-  });
-}
-
-const form = document.querySelector("#kontakt-form");
-if (form) {
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const data = new FormData(form);
-    const name = String(data.get("name") || "").trim();
-    const phone = String(data.get("telefon") || "").trim();
-    const email = String(data.get("email") || "").trim();
-    const message = String(data.get("nachricht") || "").trim();
-    const status = document.querySelector("#form-status");
-    if (!name || !message) {
-      if (status) status.textContent = "Bitte Name und Nachricht ausfüllen.";
-      return;
-    }
-    const body = ["Anfrage über den Demo-Entwurf", "", "Name: " + name, "Telefon: " + (phone || "–"), "E-Mail: " + (email || "–"), "", message].join("\n");
-    if (status) status.textContent = "Danke. Das E-Mail-Programm sollte sich jetzt öffnen.";
-    window.location.href = "mailto:elektro-mueller-gmbh@t-online.de?subject=" + encodeURIComponent("Anfrage von " + name) + "&body=" + encodeURIComponent(body);
-  });
-}
-
-const year = document.querySelector("[data-year]");
-if (year) year.textContent = String(new Date().getFullYear());

@@ -1,0 +1,19 @@
+{
+  "name": "elektro-mueller-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync-vendor": "node scripts/sync-vendor.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "test:browser": "node tests/browser.mjs",
+    "serve": "node scripts/serve.mjs"
+  },
+  "dependencies": {
+    "three": "0.186.1"
+  },
+  "devDependencies": {
+    "axe-core": "^4.11.1",
+    "esbuild": "^0.28.2",
+    "playwright": "^1.58.2"
+  }
+}

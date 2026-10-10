@@ -2,28 +2,26 @@
 <html lang="de">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-8o2X5OSQ9ZBPNmsfnjm+S/TO5Idj0ovK4Afex6S34sM='; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src https://maps.google.com; object-src 'none'; base-uri 'none'; form-action mailto:">
+  <meta name="referrer" content="no-referrer">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Elektriker in Erlangen | Elektro Müller GmbH</title>
-  <meta name="description" content="Elektro Müller GmbH in Erlangen: Elektroinstallation, Reparatur, Beleuchtung. Münchener Str. 47, Telefon 09131 20063.">
-  <meta name="robots" content="noindex">
+  <title>Website-Demo | Elektro Müller – ungeprüfter Entwurf</title>
+  <meta name="description" content="Unbeauftragter Website-Demoentwurf. Bestandsdaten und beispielhafte Leistungen sind vor Nutzung mit dem Betrieb zu prüfen.">
+  <meta name="robots" content="noindex, nofollow">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23071018'/%3E%3Cpath d='M18 4 8 18h7l-2 10 11-16h-7l1-8z' fill='%23f5c400'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css">
   <script type="importmap">
   { "imports": { "three": "./vendor/three.module.min.js" } }
   </script>
-  <script>
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      document.documentElement.classList.add("reduce");
-    }
-  </script>
 </head>
 <body>
+  <noscript><p class="wrap">JavaScript ist deaktiviert. Die Inhalte und direkten Kontaktlinks bleiben verfügbar; Maps und 3D werden nicht geladen.</p></noscript>
   <!-- Demo-Entwurf. Keine Meister-, Notdienst- oder Gründungsangaben. Festzulassung belegt über ESTW, dort Name Müller Elektro GmbH. -->
   <a class="skip" href="#inhalt">Zum Inhalt springen</a>
   <div class="progress" aria-hidden="true"></div>
   <canvas id="webgl" aria-hidden="true"></canvas>
   <div class="canvas-fade" aria-hidden="true"></div>
-  <div class="demo-banner">Demo-Entwurf von Tom Mack · Inhalte beispielhaft, werden mit Ihnen abgestimmt</div>
+  <div class="demo-banner">Unbeauftragter Demo-Entwurf von Tom Mack · Keine offizielle Betriebswebsite · Bestandsdaten ungeprüft</div>
   <header class="site-header">
     <div class="wrap bar">
       <a class="brand" href="#inhalt">
@@ -51,13 +49,15 @@
     </div>
   </header>
 
-  <main class="page" id="inhalt">
+  <main class="page" id="inhalt" tabindex="-1">
     <section class="hero">
       <div class="bulb-slot" aria-hidden="true"></div>
       <div class="wrap hero-grid">
         <div>
           <p class="eyebrow">Erlangen-Innenstadt</p>
           <h1>Elektriker in Erlangen.</h1>
+          <p><button class="btn btn-ghost" id="animation-toggle" type="button" aria-pressed="false" aria-describedby="animation-status">3D-Animation einschalten</button></p>
+          <p id="animation-status" role="status">Optional: Die Seite funktioniert auch ohne Animation.</p>
           <p class="lede">Ob neue Leitung, ein Licht, das nicht mehr will, oder ein Anschluss, der fehlt: Sie erreichen Elektro Müller direkt in der Münchener Straße. Wir schauen hin und sagen Ihnen klar, was zu tun ist.</p>
           <div class="actions">
             <a class="btn btn-primary" href="tel:+49913120063">Anrufen</a>
@@ -71,7 +71,7 @@
           <!-- PLATZHALTER: Festzulassung belegt. Die anderen Nutzenformulierungen sind allgemein, keine gemessenen Versprechen. -->
           <ul class="trust">
             <li><strong>Direkt in Erlangen</strong> Innenstadt, Münchener Straße</li>
-            <li><strong>Festzulassung</strong> bei den Erlanger Stadtwerken</li>
+            <li><strong>Demo-Entwurf</strong> Leistungen und Angaben noch abzustimmen</li>
             <li><strong>Persönlich</strong> ein Ansprechpartner für Ihr Anliegen</li>
             <li><strong>Rückmeldung</strong> wir melden uns zeitnah bei Ihnen</li>
           </ul>
@@ -158,13 +158,13 @@
         <div class="box reveal" id="kontakt">
           <h2>Nachricht</h2>
           <p>Schreiben Sie uns, worum es geht. Ihre Nachricht öffnet sich in Ihrem E-Mail-Programm.</p>
-          <form id="kontakt-form">
-            <label>Name <input name="name" type="text" autocomplete="name" required></label>
-            <label>Telefon <input name="telefon" type="tel" autocomplete="tel"></label>
-            <label>E-Mail <input name="email" type="email" autocomplete="email"></label>
-            <label>Nachricht <textarea name="nachricht" required></textarea></label>
+          <form id="kontakt-form" action="mailto:elektro-mueller-gmbh@t-online.de" method="post" enctype="text/plain">
+            <label>Name <input name="name" type="text" autocomplete="name" maxlength="100" required></label>
+            <label>Telefon <input name="telefon" type="tel" autocomplete="tel" maxlength="50"></label>
+            <label>E-Mail <input name="email" type="email" autocomplete="email" maxlength="254"></label>
+            <label>Nachricht <textarea name="nachricht" maxlength="1500" required></textarea></label>
             <label class="check"><input type="checkbox" required> <span>Ich habe den Hinweis zum <a href="datenschutz.html">Datenschutz</a> gelesen.</span></label>
-            <button class="btn btn-primary" type="submit">Nachricht senden</button>
+            <button class="btn btn-primary" type="submit">E-Mail-Entwurf öffnen</button>
             <p class="form-status" id="form-status" role="status"></p>
           </form>
         </div>
@@ -175,10 +175,12 @@
       <div class="wrap">
         <h2 id="karte-titel" class="reveal">So finden Sie uns</h2>
         <div class="map-hold reveal" id="map-hold">
-          <div>
-            <p>Münchener Str. 47, 91054 Erlangen. Die Karte wird erst geladen, wenn Sie das möchten.</p>
-            <button class="btn btn-primary" type="button" id="map-load">Karte anzeigen</button>
+          <div id="map-consent">
+            <p>Beim Laden von Google Maps werden unter anderem Ihre IP-Adresse und Browserinformationen an Google übertragen. Google kann Cookies verwenden; eine Verarbeitung außerhalb der EU ist möglich. Die Karte ist optional. <a href="datenschutz.html">Datenschutzhinweis</a></p>
+            <button class="btn btn-primary" type="button" id="map-load">Einwilligen und Google Maps laden</button>
           </div>
+          <div id="map-content"></div>
+          <button class="btn btn-ghost" type="button" id="map-remove" hidden>Karte entfernen / Einwilligung widerrufen</button>
         </div>
       </div>
     </section>
@@ -204,6 +206,6 @@
   </footer>
   <a class="call-dock btn btn-primary" href="tel:+49913120063">Anrufen · 09131 20063</a>
   <!-- PLATZHALTER: facebook.com/ElektroMuellerGmbh gehört zum Wolfsburger Betrieb, kein Link. -->
-  <script type="module" src="scene.js"></script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>

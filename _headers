@@ -1,0 +1,6 @@
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-8o2X5OSQ9ZBPNmsfnjm+S/TO5Idj0ovK4Afex6S34sM='; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src https://maps.google.com; object-src 'none'; base-uri 'none'; form-action mailto:; frame-ancestors 'none'
+  Referrer-Policy: no-referrer
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()

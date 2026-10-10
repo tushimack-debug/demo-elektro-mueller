@@ -264,3 +264,33 @@ html.js .reveal.in { opacity: 1; transform: none; }
   .btn.nav-cta { display: none; }
   .hero::before { background: linear-gradient(180deg, rgba(7,16,24,0.08) 0 190px, rgba(7,16,24,0.82) 270px, rgba(7,16,24,0.9) 100%); }
 }
+
+/* Resilient defaults for motion, keyboard use and narrow screens. */
+html.js .reveal { opacity: 1; transition: transform 0.3s ease; }
+html:not(.has-app) .site-nav { display: block; }
+html:not(.has-app) .nav-toggle, html:not(.has-app) #animation-toggle, html:not(.has-app) #map-load { display: none; }
+[hidden] { display: none !important; }
+html.reduce { scroll-behavior: auto; }
+html.reduce .reveal { opacity: 1; transform: none; transition: none; }
+html.reduce #webgl { display: none; }
+section, #kontakt, #inhalt { scroll-margin-top: 6rem; }
+.brand-text strong { white-space: normal; }
+.bar { flex-wrap: wrap; }
+.box, .card, .split > *, .about > *, .footer-grid > * { min-width: 0; }
+dd, p, a { overflow-wrap: anywhere; }
+button { touch-action: manipulation; }
+.btn, .site-nav a { min-height: 44px; }
+.legal .bar, .legal-links { flex-wrap: wrap; }
+.site-header .btn-light { margin-left: auto; }
+.call-dock { bottom: max(0.8rem, env(safe-area-inset-bottom)); }
+#map-content { width: 100%; }
+@media (max-width: 799px) {
+  .bulb-slot { height: 0; }
+  body.webgl-on:not(.no-webgl):not(.reduce) .bulb-slot { height: 280px; }
+  body.no-webgl .bulb-slot { height: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  #webgl { display: none; }
+  .bulb-slot { height: 0 !important; }
+}
