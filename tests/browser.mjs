@@ -45,10 +45,11 @@ try {
   const page = await browser.newPage();
   const errors = [];
   page.on('pageerror', err => errors.push(err.message));
-  await page.route('https://maps.google.com/**', route => route.fulfill({ status: 200, contentType: 'text/html', body: '<p>Test map</p>' }));
+  await page.route('https://www.google.com/**', route => route.fulfill({ status: 200, contentType: 'text/html', body: '<p>Test map</p>' }));
   await page.goto(origin);
   await page.locator('#map-load').click();
   assert.equal(await page.locator('iframe').count(), 1);
+  await page.frameLocator('#map-content iframe').getByText('Test map', { exact: true }).waitFor();
   assert.equal(await page.locator('iframe').getAttribute('referrerpolicy'), 'no-referrer');
   await page.locator('#map-remove').click();
   assert.equal(await page.locator('iframe').count(), 0); checks++;

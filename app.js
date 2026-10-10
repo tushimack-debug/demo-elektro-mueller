@@ -65,7 +65,7 @@ mapBtn?.addEventListener("click", () => {
   const frame = document.createElement("iframe");
   frame.title = "Google Maps: Münchener Straße 47, Erlangen (Bestandsangabe, ungeprüft)";
   frame.referrerPolicy = "no-referrer";
-  frame.src = "https://maps.google.com/maps?q=M%C3%BCnchener+Str.+47,+91054+Erlangen&hl=de&z=16&output=embed";
+  frame.src = "https://www.google.com/maps?q=M%C3%BCnchener+Str.+47,+91054+Erlangen&hl=de&z=16&output=embed";
   mapContent.replaceChildren(frame);
   mapConsent.hidden = true; mapRemove.hidden = false; mapRemove.focus();
 });

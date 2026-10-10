@@ -13,10 +13,13 @@ pnpm test
 pnpm audit --audit-level=high
 pnpm exec playwright install chromium
 pnpm test:browser
+pnpm test:maps-live
 pnpm serve
 ```
 
 Vorschau: http://127.0.0.1:4173. Der Vorschau-Server bindet nur an localhost. `test-results/` enthält Screenshots und wird nicht eingecheckt. CI installiert zusätzlich Linux-Browserabhängigkeiten. Nicht `node_modules`, `.git`, Tests oder Entwicklungsskripte veröffentlichen.
+
+`test:maps-live` prüft die echte Google-Einbettung einschließlich Weiterleitung und CSP sowie Entfernen nach Widerruf. Er benötigt Internetzugriff und sendet nach automatisierter Einwilligung eine Anfrage an Google. Mit `MAPS_TEST_URL` kann die veröffentlichte Seite geprüft werden. Dieser externe Diensttest läuft separat von der deterministischen CI; deren Kartenprüfung wartet ebenfalls auf tatsächlich geladenen Frame-Inhalt. Der Frame verwendet direkt `www.google.com`, weil die bisherige Adresse `maps.google.com` dorthin weiterleitet.
 
 ## Technische Defaults
 
@@ -25,7 +28,7 @@ Vorschau: http://127.0.0.1:4173. Der Vorschau-Server bindet nur an localhost. `t
 - Kontakt erzeugt nur einen E-Mail-Entwurf; der Nutzer muss im E-Mail-Programm senden. Formularinhalte werden nicht an einen Website-Server geschickt. Bestehender Empfänger ist ungeprüft.
 - Google Maps startet ausschließlich nach erklärter Einwilligung. Entfernen beendet die Einbettung; bereits übertragene Daten und Google-Cookies können damit nicht gelöscht werden. Keine Einwilligung wird gespeichert.
 - Three.js lädt erst beim Einschalten. Reduzierte Bewegung verhindert den Start und pausiert eine laufende Szene. Es gibt einen Ausschalter, 30-fps-Limit, niedrigere mobile Geometrie/Pixelzahl, kein mobiles Bloom, Pausieren im Hintergrund und Ressourcenfreigabe beim Ausschalten/Verlassen.
-- Meta-CSP begrenzt Skripte/Fonts auf eigene Dateien, Netzwerkzugriffe des eigenen Codes auf `none`, Frames auf `maps.google.com`. Importmap ist per Hash freigegeben. Inline-Skripte sind sonst gesperrt. Bei Änderung der Importmap müssen Meta-CSP und `_headers` zusammen aktualisiert werden. LF-Zeilenenden sind festgelegt.
+- Meta-CSP begrenzt Skripte/Fonts auf eigene Dateien, Netzwerkzugriffe des eigenen Codes auf `none`, Frames auf `www.google.com`. Importmap ist per Hash freigegeben. Inline-Skripte sind sonst gesperrt. Bei Änderung der Importmap müssen Meta-CSP und `_headers` zusammen aktualisiert werden. LF-Zeilenenden sind festgelegt.
 - `noindex, nofollow` und `robots.txt` schützen nicht vor öffentlichem Zugriff. Für vertrauliche Vorschauen Hosting-Zugriffsschutz verwenden. Canonical, Sitemap und LocalBusiness-Markup erst mit bestätigter Domain und Unternehmensdaten hinzufügen.
 
 ## Veröffentlichung und Grenzen

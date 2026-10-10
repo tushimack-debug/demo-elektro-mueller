@@ -6,6 +6,7 @@
     "sync-vendor": "node scripts/sync-vendor.mjs",
     "test": "node --test tests/*.test.mjs",
     "test:browser": "node tests/browser.mjs",
+    "test:maps-live": "node tests/maps-live.mjs",
     "serve": "node scripts/serve.mjs"
   },
   "dependencies": {
