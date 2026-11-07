@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       three:
-        specifier: 0.186.1
-        version: 0.186.1
+        specifier: 0.187.0
+        version: 0.187.0
     devDependencies:
       axe-core:
         specifier: ^4.11.1
@@ -199,8 +199,8 @@ packages:
     engines: {node: '>=20'}
     hasBin: true
 
-  three@0.186.1:
-    resolution: {integrity: sha512-blFeqb49wRCSGUGj7gtpfnSGHy2lwDk94RhUmS1c/hTby70kvChbWpkJ4Pm1390LqzzvTmzgXKHPEafJwCb8jA==}
+  three@0.187.0:
+    resolution: {integrity: sha512-Qiu7R+Cmh8CstZsY1uJOSWnVlfo7ZtNLV7mF8Jltk3LB3AtDu9cRZlcnRKkAk8Y4z6KKw35z7Y7Urd7jWY8etA==}
 
 snapshots:
 
@@ -319,4 +319,4 @@ snapshots:
     dependencies:
       playwright-core: 1.64.0
 
-  three@0.186.1: {}
+  three@0.187.0: {}

@@ -10,7 +10,7 @@
     "serve": "node scripts/serve.mjs"
   },
   "dependencies": {
-    "three": "0.186.1"
+    "three": "0.187.0"
   },
   "devDependencies": {
     "axe-core": "^4.11.1",
