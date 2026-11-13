@@ -6,9 +6,8 @@
 - [x] Bekannte Secret-Muster im getrackten Stand automatisiert prüfen; `.env` und private Schlüssel ignorieren. Kein vollständiger Beweis der Secret-Freiheit.
 - [x] CSP, Referrer-Policy und Header-Vorlage ergänzen; tatsächliche Host-Unterstützung als offen dokumentieren.
 - [x] Kein Maps-Frame vor Einwilligung; erklärter Button und Entfernen/Widerruf ohne Speicherung.
-- [x] Lokale Fonts beibehalten; keine Font-CDNs, Analytics oder externen 3D-CDNs ergänzen.
+- [x] Lokale Fonts beibehalten; keine Font-CDNs, Analytics ergänzen.
 - [x] Neue Tabs mit `noopener noreferrer` absichern und statisch prüfen; derzeit keine externen `_blank`-Links vorhanden.
-- [x] Basisbedienung von optionaler 3D-Szene trennen.
 
 ### P1 Wartung und Recovery
 - [x] Three.js aktualisieren, Lockfile, Vendor-Generator und Dependabot ergänzen.
@@ -20,13 +19,15 @@
 ### P2 Bedienung, SEO und Leistung
 - [x] Mobile Breiten, Tastaturmenü/Escape, Skiplink, Fokus und Kontrast prüfen.
 - [x] Formulare begrenzen/validieren; E-Mail-Entwurf ausdrücklich als noch nicht versendet kennzeichnen.
-- [x] Optionale 3D-Szene, reduced-motion, 30-fps-Limit, Hintergrundpause, mobiles Budget und Freigabe ergänzen.
+- [x] 3D-Szene entfernt; Hero-Grafik als statisches SVG, Abschnitte „So läuft es ab“ und „Ausbildung & Jobs“ ergänzt.
 - [x] Demo-Titel/Beschreibung, Sprache, Überschriften und noindex/nofollow ergänzen; keine erfundenen SEO-Geschäftsdaten.
 - [x] Unbelegte Festzulassungs-Aussage entfernen und Bestandsdaten als ungeprüft markieren.
 
 ## 2. Nach Kundenkontakt / vor Veröffentlichung oder Verkauf
 
 ### P1 Freigabe
+- [ ] Abschnitt „Ausbildung & Jobs“ nur behalten, wenn der Betrieb ausbildet bzw. Stellen hat.
+- [ ] Echte Fotos (Team, Fahrzeug, Werkstatt) und konkrete Öffnungszeiten vom Betrieb einholen.
 - [ ] Firmenname, Rechtsform, Anschrift, Kontakte, Leistungen, Öffnungszeiten und Qualifikationen vom Betrieb bestätigen lassen.
 - [ ] Impressum, Datenschutz und Demo-Betreiberangaben konkret vervollständigen; Hoster/Logs und Dienste prüfen.
 - [ ] Nutzungsrechte und vollständige Lizenzen für Fonts, Bilder, Texte und Marken dokumentieren.

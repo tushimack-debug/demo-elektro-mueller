@@ -21,7 +21,6 @@ try {
     assert.equal(external.length, 0, 'No external requests before consent');
     assert.equal(await page.locator('iframe').count(), 0);
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `No overflow at ${width}`);
-    assert.equal(await page.evaluate(() => performance.getEntriesByType('resource').some(r => r.name.includes('/vendor/'))), false, '3D not loaded by default');
     await page.evaluate(readFileSync('node_modules/axe-core/axe.min.js','utf8'));
     const results = await page.evaluate(() => axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a','wcag2aa','wcag21aa'] } }));
     assert.deepEqual(results.violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) })), []);
@@ -35,13 +34,6 @@ try {
     assert.deepEqual(errors, []);
     await context.close(); checks++;
   }
-  const reduced = await browser.newContext({ reducedMotion: 'reduce' });
-  const rp = await reduced.newPage();
-  await rp.goto(origin);
-  await rp.locator('#animation-toggle').click();
-  assert.match(await rp.locator('#animation-status').textContent(), /deaktiviert/);
-  assert.equal(await rp.evaluate(() => performance.getEntriesByType('resource').some(r => r.name.includes('/vendor/'))), false);
-  await reduced.close(); checks++;
   const page = await browser.newPage();
   const errors = [];
   page.on('pageerror', err => errors.push(err.message));
@@ -53,15 +45,6 @@ try {
   assert.equal(await page.locator('iframe').getAttribute('referrerpolicy'), 'no-referrer');
   await page.locator('#map-remove').click();
   assert.equal(await page.locator('iframe').count(), 0); checks++;
-  await page.locator('#animation-toggle').click();
-  await page.waitForTimeout(2000);
-  assert.equal(await page.locator('#animation-toggle').getAttribute('aria-pressed'), 'true', await page.locator('#animation-status').textContent());
-  await page.screenshot({ path: 'test-results/three-desktop.png', fullPage: true });
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  assert.equal(await page.locator('#webgl').isVisible(), false);
-  await page.emulateMedia({ reducedMotion: 'no-preference' });
-  await page.locator('#animation-toggle').click();
-  assert.equal(await page.locator('#animation-toggle').getAttribute('aria-pressed'), 'false');
   assert.deepEqual(errors, []); checks++;
   const nojs = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 320, height: 900 } });
   const np = await nojs.newPage(); await np.goto(origin);
@@ -69,27 +52,6 @@ try {
   assert.equal(await np.locator('iframe').count(), 0);
   assert.equal(await np.locator('#nav').isVisible(), true);
   await nojs.close(); checks++;
-  const broken = await browser.newPage({ viewport: { width: 390, height: 844 } });
-  await broken.route('**/scene.js', route => route.abort());
-  await broken.goto(origin);
-  await broken.locator('#animation-toggle').click();
-  await broken.getByRole('button', { name: 'Menü', exact: true }).click();
-  assert.equal(await broken.locator('#nav').isVisible(), true);
-  assert.match(await broken.locator('#animation-status').textContent(), /nicht verfügbar/);
-  await broken.close(); checks++;
-  const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
-  const mobileErrors = [];
-  mobile.on('pageerror', err => mobileErrors.push(err.message));
-  await mobile.goto(origin);
-  await mobile.locator('#animation-toggle').click();
-  await mobile.waitForTimeout(1500);
-  assert.equal(await mobile.locator('#animation-toggle').getAttribute('aria-pressed'), 'true');
-  assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
-  await mobile.screenshot({ path: 'test-results/three-mobile.png', fullPage: true });
-  assert.deepEqual(mobileErrors, []);
-  await mobile.locator('#animation-toggle').click();
-  assert.equal(await mobile.locator('#webgl').isVisible(), false);
-  await mobile.close(); checks++;
   await page.goto(origin);
   await page.locator('button[type="submit"]').click();
   assert.equal(await page.locator('input[name="name"]').evaluate(input => input.validity.valueMissing), true);
@@ -99,7 +61,7 @@ try {
   await page.locator('input[type="checkbox"]').check();
   await page.locator('button[type="submit"]').click();
   assert.match(await page.locator('#form-status').textContent(), /noch nicht versendet/);
-  assert.equal(await page.locator('script:not([src])').count(), 1); checks++;
+  assert.equal(await page.locator('script:not([src])').count(), 0); checks++;
   for (const file of ['impressum.html','datenschutz.html']) {
     await page.goto(`${origin}/${file}`);
     await page.evaluate(readFileSync('node_modules/axe-core/axe.min.js','utf8'));

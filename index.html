@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-8o2X5OSQ9ZBPNmsfnjm+S/TO5Idj0ovK4Afex6S34sM='; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src https://www.google.com; object-src 'none'; base-uri 'none'; form-action mailto:">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src https://www.google.com; object-src 'none'; base-uri 'none'; form-action mailto:">
   <meta name="referrer" content="no-referrer">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Website-Demo | Elektro Müller – ungeprüfter Entwurf</title>
@@ -10,17 +10,11 @@
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23071018'/%3E%3Cpath d='M18 4 8 18h7l-2 10 11-16h-7l1-8z' fill='%23f5c400'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css">
-  <script type="importmap">
-  { "imports": { "three": "./vendor/three.module.min.js" } }
-  </script>
 </head>
 <body>
-  <noscript><p class="wrap">JavaScript ist deaktiviert. Die Inhalte und direkten Kontaktlinks bleiben verfügbar; Maps und 3D werden nicht geladen.</p></noscript>
+  <noscript><p class="wrap">JavaScript ist deaktiviert. Die Inhalte und direkten Kontaktlinks bleiben verfügbar; die Karte wird nicht geladen.</p></noscript>
   <!-- Demo-Entwurf. Keine Meister-, Notdienst- oder Gründungsangaben. Festzulassung belegt über ESTW, dort Name Müller Elektro GmbH. -->
   <a class="skip" href="#inhalt">Zum Inhalt springen</a>
-  <div class="progress" aria-hidden="true"></div>
-  <canvas id="webgl" aria-hidden="true"></canvas>
-  <div class="canvas-fade" aria-hidden="true"></div>
   <div class="demo-banner">Unbeauftragter Demo-Entwurf von Tom Mack · Keine offizielle Betriebswebsite · Bestandsdaten ungeprüft</div>
   <header class="site-header">
     <div class="wrap bar">
@@ -41,6 +35,7 @@
         <ul>
           <li><a href="#leistungen">Leistungen</a></li>
           <li><a href="#betrieb">Betrieb</a></li>
+          <li><a href="#jobs">Jobs</a></li>
           <li><a href="#zeiten">Zeiten</a></li>
           <li><a href="#kontakt">Kontakt</a></li>
         </ul>
@@ -51,13 +46,10 @@
 
   <main class="page" id="inhalt" tabindex="-1">
     <section class="hero">
-      <div class="bulb-slot" aria-hidden="true"></div>
       <div class="wrap hero-grid">
         <div>
           <p class="eyebrow">Erlangen-Innenstadt</p>
           <h1>Elektriker in Erlangen.</h1>
-          <p><button class="btn btn-ghost" id="animation-toggle" type="button" aria-pressed="false" aria-describedby="animation-status">3D-Animation einschalten</button></p>
-          <p id="animation-status" role="status">Optional: Die Seite funktioniert auch ohne Animation.</p>
           <p class="lede">Ob neue Leitung, ein Licht, das nicht mehr will, oder ein Anschluss, der fehlt: Sie erreichen Elektro Müller direkt in der Münchener Straße. Wir schauen hin und sagen Ihnen klar, was zu tun ist.</p>
           <div class="actions">
             <a class="btn btn-primary" href="tel:+49913120063">Anrufen</a>
@@ -71,11 +63,49 @@
           <!-- PLATZHALTER: Festzulassung belegt. Die anderen Nutzenformulierungen sind allgemein, keine gemessenen Versprechen. -->
           <ul class="trust">
             <li><strong>Direkt in Erlangen</strong> Innenstadt, Münchener Straße</li>
-            <li><strong>Demo-Entwurf</strong> Leistungen und Angaben noch abzustimmen</li>
+            <li><strong>Wohnung, Haus, Gewerbe</strong> vom Defekt bis zur Neuinstallation</li>
             <li><strong>Persönlich</strong> ein Ansprechpartner für Ihr Anliegen</li>
             <li><strong>Rückmeldung</strong> wir melden uns zeitnah bei Ihnen</li>
           </ul>
         </div>
+        <div class="hero-visual" aria-hidden="true">
+          <svg viewBox="0 0 420 460" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="hv-panel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2d44"/><stop offset="1" stop-color="#0d1a2a"/></linearGradient>
+            </defs>
+            <path d="M40 420 C 40 330, 120 330, 120 250" fill="none" stroke="#f5c400" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+            <path d="M380 430 C 380 360, 330 350, 330 300" fill="none" stroke="#6f8fb8" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+            <rect x="90" y="40" width="270" height="270" rx="22" fill="url(#hv-panel)" stroke="#2c4462" stroke-width="2"/>
+            <rect x="112" y="62" width="226" height="26" rx="8" fill="#0a1522"/>
+            <g fill="#26405f">
+              <rect x="118" y="110" width="30" height="64" rx="6"/><rect x="158" y="110" width="30" height="64" rx="6"/><rect x="198" y="110" width="30" height="64" rx="6"/><rect x="238" y="110" width="30" height="64" rx="6"/><rect x="278" y="110" width="44" height="64" rx="6"/>
+              <rect x="118" y="196" width="30" height="64" rx="6"/><rect x="158" y="196" width="30" height="64" rx="6"/><rect x="198" y="196" width="30" height="64" rx="6"/><rect x="238" y="196" width="30" height="64" rx="6"/><rect x="278" y="196" width="44" height="64" rx="6"/>
+            </g>
+            <g fill="#f5c400">
+              <rect x="126" y="120" width="14" height="20" rx="3"/><rect x="166" y="120" width="14" height="20" rx="3"/><rect x="206" y="144" width="14" height="20" rx="3" fill="#c5d0df"/><rect x="246" y="120" width="14" height="20" rx="3"/><rect x="290" y="120" width="20" height="20" rx="3"/>
+              <rect x="126" y="206" width="14" height="20" rx="3"/><rect x="166" y="206" width="14" height="20" rx="3"/><rect x="206" y="206" width="14" height="20" rx="3"/><rect x="246" y="230" width="14" height="20" rx="3" fill="#c5d0df"/><rect x="290" y="206" width="20" height="20" rx="3"/>
+            </g>
+            <circle cx="322" cy="75" r="5" fill="#5ee38b"/>
+            <g transform="translate(250 300)">
+              <circle r="58" fill="#f5c400"/>
+              <path d="M8 -36 -20 6h18l-6 30 28-42H2z" fill="#102013"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="ablauf">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2>So läuft es ab</h2>
+          <p>Kein Formular-Marathon, keine Warteschleife. Drei Schritte bis zur Lösung.</p>
+        </div>
+        <ol class="steps">
+          <li class="card reveal"><span class="step-no" aria-hidden="true">1</span><h3>Anrufen</h3><p>Sie schildern kurz, worum es geht – am Telefon oder per Nachricht.</p></li>
+          <li class="card reveal"><span class="step-no" aria-hidden="true">2</span><h3>Termin</h3><p>Wir vereinbaren einen Termin, schauen uns die Sache an und sagen Ihnen klar, was zu tun ist.</p></li>
+          <li class="card reveal"><span class="step-no" aria-hidden="true">3</span><h3>Erledigt</h3><p>Die Arbeit wird sauber ausgeführt, und Sie wissen hinterher, was gemacht wurde.</p></li>
+        </ol>
       </div>
     </section>
 
@@ -146,6 +176,20 @@
       </div>
     </section>
 
+    <!-- PLATZHALTER: Ob der Betrieb ausbildet oder Stellen offen hat, ist ungeprüft. Vor Veröffentlichung abstimmen. -->
+    <section class="section" id="jobs">
+      <div class="wrap">
+        <div class="box jobs reveal">
+          <div>
+            <p class="eyebrow">Ausbildung &amp; Jobs</p>
+            <h2>Elektriker/in werden – in Erlangen.</h2>
+            <p>Sie suchen eine Ausbildung als Elektroniker/in oder eine Stelle im Handwerk? Melden Sie sich einfach – ein kurzer Anruf genügt für ein erstes Kennenlernen.</p>
+          </div>
+          <a class="btn btn-primary" href="tel:+49913120063">Jetzt anrufen</a>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="zeiten">
       <div class="wrap split">
         <div class="box reveal">
@@ -164,7 +208,7 @@
             <label>E-Mail <input name="email" type="email" autocomplete="email" maxlength="254"></label>
             <label>Nachricht <textarea name="nachricht" maxlength="1500" required></textarea></label>
             <label class="check"><input type="checkbox" required> <span>Ich habe den Hinweis zum <a href="datenschutz.html">Datenschutz</a> gelesen.</span></label>
-            <button class="btn btn-primary" type="submit">E-Mail-Entwurf öffnen</button>
+            <button class="btn btn-primary" type="submit">Nachricht per E-Mail senden</button>
             <p class="form-status" id="form-status" role="status"></p>
           </form>
         </div>

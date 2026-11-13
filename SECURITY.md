@@ -30,7 +30,6 @@ git pull --ff-only
 git log --oneline -10
 git revert <fehlerhafter-commit>
 pnpm install --frozen-lockfile
-pnpm sync-vendor
 pnpm test
 pnpm test:browser
 git push origin main
@@ -46,4 +45,4 @@ git push origin main
 4. Sauberen Commit mit aktuellen Dependencies testen und kontrolliert veröffentlichen. Header, DNS, Zertifikat, Kontaktziele und externe Requests prüfen.
 5. Ursache, Umfang, Maßnahmen und Zeitpunkt dokumentieren; Zugriffsrechte und Recovery-Prozess verbessern.
 
-Konfigurationsquellen: [Three.js Installation](https://threejs.org/manual/pages/installation.html), [MDN CSP](https://developer.mozilla.org/en-US/docs/Web/Security/Practical_implementation_guides/CSP).
+Konfigurationsquellen: [MDN CSP](https://developer.mozilla.org/en-US/docs/Web/Security/Practical_implementation_guides/CSP).
